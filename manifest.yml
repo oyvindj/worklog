@@ -1,0 +1,4 @@
+applications:
+- name: access-view
+  host: fp-access-view-test
+  memory: 128M
