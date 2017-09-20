@@ -1,4 +1,4 @@
 applications:
-- name: access-view
-  host: fp-access-view-test
+- name: worklog-view
+  host: oj-worklog-view
   memory: 128M

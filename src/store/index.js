@@ -15,6 +15,8 @@ const state = {
   companies: [],
   users: [],
   authenticated: false,
+  confirmed: false,
+  error: false,
   user: null
 }
 

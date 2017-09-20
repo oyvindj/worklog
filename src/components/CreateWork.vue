@@ -1,6 +1,21 @@
 <template xmlns="http://www.w3.org/1999/html">
   <div class="navbar">
     <h3>Logg Arbeid</h3>
+    <div v-if="error" class="ui error message">
+      <i class="close icon" @click="closeError()"></i>
+      <div class="header">
+        Logging av arbeid feilet
+      </div>
+      <p>Sjekk form input. Dato må være i framtiden og fra-tid før til-tid</p>
+    </div>
+    <div v-if="confirmed" class="ui message">
+      <i class="close icon" @click="closeMessage()"></i>
+      <div class="header">
+        Arbeidet er logget
+      </div>
+      <p>Se oversikt over ukas arbeid på XXX</p>
+    </div>
+
     <div class="work-form">
       <div class="ui labeled input form-row" v-bind:class="errorClass('firstName')">
         <div class="ui label">Beskrivelse *</div>
@@ -53,7 +68,9 @@
       ...mapGetters({
         projects: 'GET_PROJECTS',
         companies: 'GET_COMPANIES',
-        user: 'GET_USER'
+        user: 'GET_USER',
+        confirmed: 'GET_CONFIRMED',
+        error: 'GET_ERROR'
       })
     },
     methods: {
@@ -63,12 +80,18 @@
         this.work['date'] = new Date()
         localStorage.setItem('last_company', this.work.company)
         localStorage.setItem('last_project', this.work.project)
-        this.createWork(this.work)
+        const success = (item) => {
+          console.log('cb called: ' + JSON.stringify(item))
+        }
+        this.createWork({work: this.work, success: success, error: success})
       },
       validate () {
         return true
       },
-      ...mapMutations({}),
+      ...mapMutations({
+        setConfirmed: 'SET_CONFIRMED',
+        setError: 'SET_ERROR'
+      }),
       ...mapActions({
         loadProjects: 'LOAD_PROJECTS',
         loadCompanies: 'LOAD_COMPANIES',
@@ -76,6 +99,12 @@
       }),
       errorClass () {
         return ''
+      },
+      closeError () {
+        this.setError(false)
+      },
+      closeMessage () {
+        this.setConfirmed(false)
       }
     },
     mounted: function () {

@@ -13,3 +13,9 @@ export const SET_PROJECTS = (state, data) => {
 export const SET_COMPANIES = (state, data) => {
   state.companies = data
 }
+export const SET_ERROR = (state, data) => {
+  state.error = data
+}
+export const SET_CONFIRMED = (state, data) => {
+  state.confirmed = data
+}

@@ -16,3 +16,9 @@ export const GET_PROJECTS = state => {
 export const GET_COMPANIES = state => {
   return state.companies
 }
+export const GET_ERROR = state => {
+  return state.error
+}
+export const GET_CONFIRMED = state => {
+  return state.confirmed
+}
