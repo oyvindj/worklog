@@ -22,6 +22,12 @@
         <input v-model="work.description" placeholder="beskrivelse">
       </div>
       <div class="form-row">
+        <div class="ui labeled input" v-bind:class="errorClass('fromDate')">
+          <div class="ui label"><i class="calendar icon"></i>Dato</div>
+          <input v-model="work.date" type="date">
+        </div>
+      </div>
+      <div class="form-row">
         <div class="ui labeled input" v-bind:class="errorClass('fromTime')">
           <div class="ui label"><i class="clock icon"></i>Fra Tid</div>
           <input v-model="work.fromTime" placeholder="tt:mm">
@@ -61,7 +67,8 @@
         work: {
           toTime: dateUtil.getCurrentTimeString(new Date()),
           company: localStorage.getItem('last_company'),
-          project: localStorage.getItem('last_project')
+          project: localStorage.getItem('last_project'),
+          date: new Date()
         }
       }
     },
@@ -78,7 +85,7 @@
       submitForm () {
         console.log('submitForm()...')
         this.work['nickname'] = this.user.nickname
-        this.work['date'] = new Date()
+        // this.work['date'] = new Date()
         localStorage.setItem('last_company', this.work.company)
         localStorage.setItem('last_project', this.work.project)
         const fromTime = new dateUtil.MyTime(this.work.fromTime)
@@ -87,7 +94,7 @@
         this.work['toTime'] = toTime.getTime()
         const success = (item) => {
           console.log('cb called: ' + JSON.stringify(item))
-          this.confirmationMessage = item.company + ' - ' + item.project + ' (' + item.description + '): ' + item.fromTime + '-' + item.toTime
+          this.confirmationMessage = item.company + ' - ' + item.project + ' (' + item.description + '): ' + item.fromTime + '-' + item.toTime + ' (' + item.duration + ')'
         }
         this.createWork({work: this.work, success: success, error: success})
       },

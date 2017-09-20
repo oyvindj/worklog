@@ -7,6 +7,7 @@
         <th>Kunde</th>
         <th>Prosjekt</th>
         <th>Dato</th>
+        <th>Varighet</th>
         <th>Beskrivelse</th>
         <th v-if="isAdmin">Bruker</th>
         <th>&nbsp;</th>
@@ -17,15 +18,16 @@
         <td> <div class="ui fluid large label">{{item.company}}</div> </td>
         <td> <div class="ui fluid large label">{{item.project}}</div> </td>
         <td> <div class="ui fluid large label">{{ dateString(new Date(item.date)) }}</div> </td>
+        <td> <div class="ui fluid large label">{{ item.duration }}</div> </td>
         <td> <div class="ui fluid large label">{{ item.description }}</div> </td>
         <td v-if="isAdmin"> <div class="ui fluid large label">{{item.nickname}}</div> </td>
         <td>
           <div class="ui horizontal">
             <button @click="submitDeleteQuestion(item)" class="ui red button"> Slett </button>
-            <button @click="voteUp(item)" class="ui button">
+            <!--<button @click="voteUp(item)" class="ui button">
               <i class="thumbs up icon"></i>
               Vote
-            </button>
+            </button>-->
           </div>
         </td>
       </tr>
