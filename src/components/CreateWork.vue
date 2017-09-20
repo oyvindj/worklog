@@ -13,7 +13,7 @@
       <div class="header">
         Arbeidet er logget
       </div>
-      <p>Se oversikt over ukas arbeid på XXX</p>
+      <p>{{ confirmationMessage }}</p>
     </div>
 
     <div class="work-form">
@@ -57,6 +57,7 @@
     name: 'creatework',
     data () {
       return {
+        confirmationMessage: '',
         work: {
           toTime: dateUtil.getCurrentTimeString(new Date()),
           company: localStorage.getItem('last_company'),
@@ -80,8 +81,13 @@
         this.work['date'] = new Date()
         localStorage.setItem('last_company', this.work.company)
         localStorage.setItem('last_project', this.work.project)
+        const fromTime = new dateUtil.MyTime(this.work.fromTime)
+        const toTime = new dateUtil.MyTime(this.work.toTime)
+        this.work['fromTime'] = fromTime.getTime()
+        this.work['toTime'] = toTime.getTime()
         const success = (item) => {
           console.log('cb called: ' + JSON.stringify(item))
+          this.confirmationMessage = item.company + ' - ' + item.project + ' (' + item.description + '): ' + item.fromTime + '-' + item.toTime
         }
         this.createWork({work: this.work, success: success, error: success})
       },

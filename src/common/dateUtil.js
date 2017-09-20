@@ -1,3 +1,31 @@
+const findSeparator = (time) => {
+  const seps = [':', '.', ',', '-']
+  for (const sep of seps) {
+    console.log(sep)
+    if (time.indexOf(sep) !== -1) {
+      return sep
+    }
+  }
+  return null
+}
+
+export class MyTime {
+  constructor (time) {
+    let sep = findSeparator(time)
+    if (sep === null) {
+      time = time + ':00'
+      sep = ':'
+    }
+    const hours = time.split(sep)[0]
+    const min = time.split(sep)[1]
+    this.hours = get2Digits(parseInt(hours))
+    this.min = get2Digits(parseInt(min))
+  }
+  getTime () {
+    return this.hours + ':' + this.min
+  }
+}
+
 export const formatDate = (d) => {
   const date = new MyDate(d)
   return date.toString()

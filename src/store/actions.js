@@ -58,7 +58,7 @@ const create = ({dispatch, commit, state}, payload, entity, dispatchTo, inFilter
   axios.post(url, payload, {headers: restUtil.headers, params: params}).then(resp => {
     console.log('created entity...')
     commit('SET_CONFIRMED', true)
-    success(payload)
+    success(resp.data)
     dispatch(dispatchTo)
   }).catch(error => {
     console.log('Error creating ' + entity, error)

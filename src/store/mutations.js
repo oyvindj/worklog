@@ -15,7 +15,9 @@ export const SET_COMPANIES = (state, data) => {
 }
 export const SET_ERROR = (state, data) => {
   state.error = data
+  state.confirmed = false
 }
 export const SET_CONFIRMED = (state, data) => {
   state.confirmed = data
+  state.error = false
 }
