@@ -1,6 +1,19 @@
 <template xmlns="http://www.w3.org/1999/html">
-  <div class="navbar">
+  <div class="create-worknavbar">
     <h3>Logg Arbeid</h3>
+    <modal v-model="showCreateCompany">
+      <p slot="header">Skriv inn firmanavn</p>
+      <div slot="content" class="work-form">
+        <div class="ui labeled input form-row" v-bind:class="errorClass('name')">
+          <div class="ui label">Firmanavn</div>
+          <input v-model="companyName" placeholder="firmanavn">
+        </div>
+      </div>
+      <template slot="actions">
+        <div class="ui black deny button" @click="showCreateCompany=false">Avbryt</div>
+        <div class="ui positive right button" @click="confirmCreateCompany()">Lagre</div>
+      </template>
+    </modal>
     <div v-if="error" class="ui error message">
       <i class="close icon" @click="closeError()"></i>
       <div class="header">
@@ -42,6 +55,7 @@
         <select class="ui fluid dropdown" v-model="work.company">
           <option v-for="item in companies" v-bind:value="item">{{ item }}</option>
         </select>
+        <a @click="submitCreateCompany()">Legg til</a>
       </div>
       <div class="ui labeled input form-row" v-bind:class="errorClass('center')">
         <div class="ui label"><i class="building icon"></i>Prosjekt *</div>
@@ -58,14 +72,21 @@
 <script>
   import { mapGetters, mapMutations, mapActions } from 'vuex'
   import * as dateUtil from '../common/dateUtil'
+  import modal from 'vue-semantic-modal'
+  import CreateCompany from './CreateCompany.vue'
 
   export default {
     name: 'creatework',
     data () {
       return {
         confirmationMessage: '',
-        work: this.createNewWork()
+        work: this.createNewWork(),
+        companyName: '',
+        showCreateCompany: false
       }
+    },
+    components: {
+      modal, CreateCompany
     },
     computed: {
       ...mapGetters({
@@ -77,6 +98,13 @@
       })
     },
     methods: {
+      confirmCreateCompany () {
+        console.log('confirmCreateCompany: ' + this.companyName)
+        this.showCreateCompany = false
+      },
+      submitCreateCompany () {
+        this.showCreateCompany = true
+      },
       createNewWork () {
         const date = new dateUtil.MyDate(new Date())
         return {

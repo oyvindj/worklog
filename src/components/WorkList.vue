@@ -6,7 +6,7 @@
       <p slot="content">Er du sikker på at du vil slette?</p>
       <template slot="actions">
         <div class="ui black deny button" @click="showModal=false">Nei</div>
-        <div class="ui positive right button" @click="confirm()">Ja</div>
+        <div class="ui positive right button" @click="confirmDelete()">Ja</div>
       </template>
     </modal>
     <table class="ui celled striped table">
@@ -14,7 +14,7 @@
       <tr>
         <th>Kunde</th>
         <th>Prosjekt</th>
-        <th>Dato</th>
+        <th>Tid</th>
         <th>Varighet</th>
         <th>Beskrivelse</th>
         <th v-if="isAdmin">Bruker</th>
@@ -31,7 +31,7 @@
         <td v-if="isAdmin"> <div class="ui fluid large label">{{item.nickname}}</div> </td>
         <td>
           <div class="ui horizontal">
-            <button @click="submitDeleteQuestion(item)" class="ui red button"> Slett </button>
+            <button @click="submitDelete(item)" class="ui red button"> Slett </button>
             <!--<button @click="voteUp(item)" class="ui button">
               <i class="thumbs up icon"></i>
               Vote
@@ -64,7 +64,8 @@
     },
     data () {
       return {
-        showModal: false
+        showModal: false,
+        deleteItem: null
       }
     },
     components: {
@@ -76,8 +77,9 @@
       })
     },
     methods: {
-      confirm () {
+      confirmDelete () {
         console.log('confirm...')
+        this.deleteQuestion(this.deleteItem.id)
         this.showModal = false
       },
       dateString (item) {
@@ -92,9 +94,10 @@
       }),
       ...mapMutations({
       }),
-      submitDeleteQuestion (item) {
+      submitDelete (item) {
         console.log('showing modal...')
         // this.deleteQuestion(item.id)
+        this.deleteItem = item
         this.showModal = true
       }
     },
