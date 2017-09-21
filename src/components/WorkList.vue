@@ -1,6 +1,14 @@
 <template>
   <div>
     <h3>Arbeidsliste</h3>
+    <modal v-model="showModal">
+      <p slot="header">Bekreft Sletting</p>
+      <p slot="content">Er du sikker på at du vil slette?</p>
+      <template slot="actions">
+        <div class="ui black deny button" @click="showModal=false">Nei</div>
+        <div class="ui positive right button" @click="confirm()">Ja</div>
+      </template>
+    </modal>
     <table class="ui celled striped table">
       <thead>
       <tr>
@@ -41,6 +49,7 @@
 <script>
   import { mapGetters, mapActions, mapMutations } from 'vuex'
   import * as dateUtil from '../common/dateUtil'
+  import modal from 'vue-semantic-modal'
 
   export default {
     name: 'questionlist',
@@ -53,12 +62,24 @@
         type: Boolean
       }
     },
+    data () {
+      return {
+        showModal: false
+      }
+    },
+    components: {
+      modal
+    },
     computed: {
       ...mapGetters({
         profile: 'GET_USER'
       })
     },
     methods: {
+      confirm () {
+        console.log('confirm...')
+        this.showModal = false
+      },
       dateString (item) {
         const d = new dateUtil.MyDate(new Date(item.date))
         return d.getShortDateString() + ' ' + item.fromTime + '-' + item.toTime
@@ -72,7 +93,9 @@
       ...mapMutations({
       }),
       submitDeleteQuestion (item) {
-        this.deleteQuestion(item.id)
+        console.log('showing modal...')
+        // this.deleteQuestion(item.id)
+        this.showModal = true
       }
     },
     mounted: function () {
