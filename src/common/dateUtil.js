@@ -91,8 +91,14 @@ export class MyDate {
   toString () {
     return this.getDateString() + ' - ' + this.getTimeString()
   }
+  getShortDateString () {
+    return get2Digits(this.day) + '/' + get2Digits(this.month)
+  }
   getDateString () {
     return get2Digits(this.day) + this.DATE_SEP + get2Digits(this.month) + this.DATE_SEP + this.year
+  }
+  getInputString () {
+    return this.year + '-' + get2Digits(this.month) + '-' + get2Digits(this.day)
   }
   getTimeString () {
     return get2Digits(this.hours) + this.TIME_SEP + get2Digits(this.min)

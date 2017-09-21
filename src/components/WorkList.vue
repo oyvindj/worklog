@@ -17,7 +17,7 @@
       <tr>
         <td> <div class="ui fluid large label">{{item.company}}</div> </td>
         <td> <div class="ui fluid large label">{{item.project}}</div> </td>
-        <td> <div class="ui fluid large label">{{ dateString(new Date(item.date)) }}</div> </td>
+        <td> <div class="ui fluid large label">{{ dateString(item) }}</div> </td>
         <td> <div class="ui fluid large label">{{ item.duration }}</div> </td>
         <td> <div class="ui fluid large label">{{ item.description }}</div> </td>
         <td v-if="isAdmin"> <div class="ui fluid large label">{{item.nickname}}</div> </td>
@@ -59,9 +59,9 @@
       })
     },
     methods: {
-      dateString (date) {
-        const d = new dateUtil.MyDate(date)
-        return d.getDateString()
+      dateString (item) {
+        const d = new dateUtil.MyDate(new Date(item.date))
+        return d.getShortDateString() + ' ' + item.fromTime + '-' + item.toTime
       },
       voteUp (item) {
         console.log('vote up...')

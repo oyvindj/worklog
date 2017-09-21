@@ -64,12 +64,7 @@
     data () {
       return {
         confirmationMessage: '',
-        work: {
-          toTime: dateUtil.getCurrentTimeString(new Date()),
-          company: localStorage.getItem('last_company'),
-          project: localStorage.getItem('last_project'),
-          date: new Date()
-        }
+        work: this.createNewWork()
       }
     },
     computed: {
@@ -82,6 +77,15 @@
       })
     },
     methods: {
+      createNewWork () {
+        const date = new dateUtil.MyDate(new Date())
+        return {
+          toTime: dateUtil.getCurrentTimeString(new Date()),
+          company: localStorage.getItem('last_company'),
+          project: localStorage.getItem('last_project'),
+          date: date.getInputString()
+        }
+      },
       submitForm () {
         console.log('submitForm()...')
         this.work['nickname'] = this.user.nickname
@@ -95,6 +99,7 @@
         const success = (item) => {
           console.log('cb called: ' + JSON.stringify(item))
           this.confirmationMessage = item.company + ' - ' + item.project + ' (' + item.description + '): ' + item.fromTime + '-' + item.toTime + ' (' + item.duration + ')'
+          this.work = this.createNewWork()
         }
         this.createWork({work: this.work, success: success, error: success})
       },
