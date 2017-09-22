@@ -1,6 +1,25 @@
 <template xmlns="http://www.w3.org/1999/html">
   <div class="create-worknavbar">
     <h3>Logg Arbeid</h3>
+    <modal v-model="showCreateProject">
+      <p slot="header">Skriv inn prosjektnavn og velg firma</p>
+      <div slot="content" class="work-form">
+        <div class="ui labeled input form-row" v-bind:class="errorClass('name')">
+          <div class="ui label">Prosjektnavn</div>
+          <input v-model="projectName" placeholder="prosjektnavn">
+        </div>
+        <div class="ui labeled input form-row" v-bind:class="errorClass('center')">
+          <div class="ui label"><i class="building icon"></i>Firma *</div>
+          <select class="ui fluid dropdown" v-model="projectCompanyId">
+            <option v-for="item in companies" v-bind:value="item.id">{{ item.name }}</option>
+          </select>
+        </div>
+      </div>
+      <template slot="actions">
+        <div class="ui black deny button" @click="showCreateProject=false">Avbryt</div>
+        <div class="ui positive right button" @click="confirmCreateProject()">Lagre</div>
+      </template>
+    </modal>
     <modal v-model="showCreateCompany">
       <p slot="header">Skriv inn firmanavn</p>
       <div slot="content" class="work-form">
@@ -52,16 +71,17 @@
       </div>
       <div class="ui labeled input form-row" v-bind:class="errorClass('center')">
         <div class="ui label"><i class="building icon"></i>Firma *</div>
-        <select class="ui fluid dropdown" v-model="work.company">
-          <option v-for="item in companies" v-bind:value="item">{{ item }}</option>
+        <select class="ui fluid dropdown" v-model="work.companyId">
+          <option v-for="item in companies" v-bind:value="item.id">{{ item.name }}</option>
         </select>
         <a @click="submitCreateCompany()">Legg til</a>
       </div>
       <div class="ui labeled input form-row" v-bind:class="errorClass('center')">
         <div class="ui label"><i class="building icon"></i>Prosjekt *</div>
-        <select class="ui fluid dropdown" v-model="work.project">
-          <option v-for="item in projects" v-bind:value="item">{{ item }}</option>
+        <select class="ui fluid dropdown" v-model="work.projectId">
+          <option v-for="item in projects" v-bind:value="item.id">{{ item }}</option>
         </select>
+        <a @click="submitCreateProject()">Legg til</a>
       </div>
       <button :disabled="!validate()" v-on:click="submitForm" class="ui large primary button" tabindex="0">
         Lagre
@@ -73,7 +93,6 @@
   import { mapGetters, mapMutations, mapActions } from 'vuex'
   import * as dateUtil from '../common/dateUtil'
   import modal from 'vue-semantic-modal'
-  import CreateCompany from './CreateCompany.vue'
 
   export default {
     name: 'creatework',
@@ -82,11 +101,14 @@
         confirmationMessage: '',
         work: this.createNewWork(),
         companyName: '',
-        showCreateCompany: false
+        projectName: '',
+        projectCompanyId: -1,
+        showCreateCompany: false,
+        showCreateProject: false
       }
     },
     components: {
-      modal, CreateCompany
+      modal
     },
     computed: {
       ...mapGetters({
@@ -100,7 +122,28 @@
     methods: {
       confirmCreateCompany () {
         console.log('confirmCreateCompany: ' + this.companyName)
+        const success = (item) => {
+          console.log('company created...')
+        }
+        const error = (item) => {
+          console.log('error company create: ' + item)
+        }
+        const company = {
+          name: this.companyName
+        }
+        this.createCompany({data: company, success: success, error: error})
         this.showCreateCompany = false
+      },
+      confirmCreateProject () {
+        const project = {
+          name: this.projectName,
+          companyId: this.projectCompanyId
+        }
+        this.createProject({data: project, success: () => {}, error: () => {}})
+        this.showCreateProject = false
+      },
+      submitCreateProject () {
+        this.showCreateProject = true
       },
       submitCreateCompany () {
         this.showCreateCompany = true
@@ -117,7 +160,6 @@
       submitForm () {
         console.log('submitForm()...')
         this.work['nickname'] = this.user.nickname
-        // this.work['date'] = new Date()
         localStorage.setItem('last_company', this.work.company)
         localStorage.setItem('last_project', this.work.project)
         const fromTime = new dateUtil.MyTime(this.work.fromTime)
@@ -141,7 +183,9 @@
       ...mapActions({
         loadProjects: 'LOAD_PROJECTS',
         loadCompanies: 'LOAD_COMPANIES',
-        createWork: 'CREATE_WORK'
+        createWork: 'CREATE_WORK',
+        createCompany: 'CREATE_COMPANY',
+        createProject: 'CREATE_PROJECT'
       }),
       errorClass () {
         return ''
@@ -154,10 +198,14 @@
       }
     },
     mounted: function () {
-      this.loadProjects()
+      // this.loadProjects()
       this.loadCompanies()
+    },
+    watch: {
+      'work.companyId': function () {
+        this.loadProjects(this.work.companyId)
+      }
     }
-
   }
 </script>
 <style scoped>

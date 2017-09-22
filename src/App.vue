@@ -69,7 +69,6 @@ export default {
       console.log('authenticated changed...')
     }
   }
-
 }
 </script>
 

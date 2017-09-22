@@ -6,6 +6,12 @@ export const DELETE_WORK = ({dispatch, commit, state}, payload) => {
 export const CREATE_WORK = ({dispatch, commit, state}, payload) => {
   serviceUtil.create({dispatch, commit, state}, payload.work, 'work', 'LOAD_WORK_LIST', payload.success, payload.error)
 }
+export const CREATE_COMPANY = ({dispatch, commit, state}, payload) => {
+  serviceUtil.create({dispatch, commit, state}, payload.data, 'company', 'LOAD_COMPANIES', payload.success, payload.error)
+}
+export const CREATE_PROJECT = ({dispatch, commit, state}, payload) => {
+  serviceUtil.create({dispatch, commit, state}, payload.data, 'project', 'LOAD_PROJECTS', payload.success, payload.error)
+}
 export const LOAD_WORK_LIST = ({commit, state}, payload) => {
   serviceUtil.load({commit, state}, payload, 'work', 'SET_WORK_LIST', null)
 }
@@ -13,5 +19,8 @@ export const LOAD_COMPANIES = ({commit, state}, payload) => {
   serviceUtil.load({commit, state}, payload, 'company', 'SET_COMPANIES', null)
 }
 export const LOAD_PROJECTS = ({commit, state}, payload) => {
-  serviceUtil.load({commit, state}, payload, 'project', 'SET_PROJECTS', null)
+  const filter = {
+    companyId: payload
+  }
+  serviceUtil.load({commit, state}, payload, 'project', 'SET_PROJECTS', filter)
 }
