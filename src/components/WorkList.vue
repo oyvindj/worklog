@@ -1,5 +1,19 @@
 <template>
-  <div>
+  <div class="worklist">
+    <div v-if="showErrorDelete" class="ui error message">
+      <i class="close icon" @click="closeErrorDelete()"></i>
+      <div class="header">
+        Sletting av arbeid feilet
+      </div>
+      <p>Noe gikk feil. Prøv igjen senere</p>
+    </div>
+    <div v-if="showConfirmDelete" class="ui message">
+      <i class="close icon" @click="closeConfirmDelete()"></i>
+      <div class="header">
+        Arbeidet er slettet
+      </div>
+      <p>blah blah...</p>
+    </div>
     <h3>Arbeidsliste</h3>
     <modal v-model="showModal">
       <p slot="header">Bekreft Sletting</p>
@@ -65,7 +79,9 @@
     data () {
       return {
         showModal: false,
-        deleteItem: null
+        deleteItem: null,
+        showConfirmDelete: false,
+        showErrorDelete: false
       }
     },
     components: {
@@ -79,7 +95,17 @@
     methods: {
       confirmDelete () {
         console.log('confirm...')
-        this.deleteQuestion(this.deleteItem.id)
+        const success = (item) => {
+          console.log('item deleted...')
+          this.showConfirmDelete = true
+          this.showErrorDelete = false
+        }
+        const error = (item) => {
+          console.log('error deleting...')
+          this.showConfirmDelete = false
+          this.showErrorDelete = true
+        }
+        this.deleteQuestion({item: this.deleteItem.id, success: success, error: error})
         this.showModal = false
       },
       dateString (item) {
@@ -99,6 +125,12 @@
         // this.deleteQuestion(item.id)
         this.deleteItem = item
         this.showModal = true
+      },
+      closeErrorDelete () {
+        this.showErrorDelete = false
+      },
+      closeConfirmDelete () {
+        this.showConfirmDelete = false
       }
     },
     mounted: function () {
