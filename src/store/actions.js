@@ -22,5 +22,8 @@ export const LOAD_PROJECTS = ({commit, state}, payload) => {
   const filter = {
     companyId: payload
   }
-  serviceUtil.load({commit, state}, payload, 'project', 'SET_PROJECTS', filter)
+  serviceUtil.load({commit, state}, payload, 'companyproject', 'SET_PROJECTS', filter)
+}
+export const LOAD_ALL_PROJECTS = ({commit, state}, payload) => {
+  serviceUtil.load({commit, state}, payload, 'project', 'SET_ALL_PROJECTS', {})
 }

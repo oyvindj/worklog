@@ -13,6 +13,9 @@ export const GET_WORK_LIST = state => {
 export const GET_PROJECTS = state => {
   return state.projects
 }
+export const GET_ALL_PROJECTS = state => {
+  return state.allProjects
+}
 export const GET_COMPANIES = state => {
   return state.companies
 }

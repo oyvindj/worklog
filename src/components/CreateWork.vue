@@ -71,7 +71,7 @@
       </div>
       <div class="ui labeled input form-row" v-bind:class="errorClass('center')">
         <div class="ui label"><i class="building icon"></i>Firma *</div>
-        <select class="ui fluid dropdown" v-model="work.companyId">
+        <select class="ui fluid dropdown" v-model="companyId">
           <option v-for="item in companies" v-bind:value="item.id">{{ item.name }}</option>
         </select>
         <a @click="submitCreateCompany()">Legg til</a>
@@ -79,7 +79,7 @@
       <div class="ui labeled input form-row" v-bind:class="errorClass('center')">
         <div class="ui label"><i class="building icon"></i>Prosjekt *</div>
         <select class="ui fluid dropdown" v-model="work.projectId">
-          <option v-for="item in projects" v-bind:value="item.id">{{ item }}</option>
+          <option v-for="item in projects" v-bind:value="item.id">{{ item.name }}</option>
         </select>
         <a @click="submitCreateProject()">Legg til</a>
       </div>
@@ -117,7 +117,20 @@
         user: 'GET_USER',
         confirmed: 'GET_CONFIRMED',
         error: 'GET_ERROR'
-      })
+      }),
+      companyId: {
+        get: function () {
+          return this.work.companyId
+        },
+        set: function (value) {
+          if (value === undefined) {
+            return
+          }
+          console.log('setting companyId to: ' + value)
+          this.work.companyId = value
+          this.loadProjects(value)
+        }
+      }
     },
     methods: {
       confirmCreateCompany () {
@@ -139,7 +152,14 @@
           name: this.projectName,
           companyId: this.projectCompanyId
         }
-        this.createProject({data: project, success: () => {}, error: () => {}})
+        const success = (item) => {
+          console.log('project created...')
+          this.loadProjects(this.projectCompanyId)
+        }
+        const error = (item) => {
+          console.log('error project create: ' + item)
+        }
+        this.createProject({data: project, success: success, error: error})
         this.showCreateProject = false
       },
       submitCreateProject () {
@@ -152,16 +172,16 @@
         const date = new dateUtil.MyDate(new Date())
         return {
           toTime: dateUtil.getCurrentTimeString(new Date()),
-          company: localStorage.getItem('last_company'),
-          project: localStorage.getItem('last_project'),
+          companyId: localStorage.getItem('last_company'),
+          projectId: localStorage.getItem('last_project'),
           date: date.getInputString()
         }
       },
       submitForm () {
         console.log('submitForm()...')
         this.work['nickname'] = this.user.nickname
-        localStorage.setItem('last_company', this.work.company)
-        localStorage.setItem('last_project', this.work.project)
+        localStorage.setItem('last_company', this.work.companyId)
+        localStorage.setItem('last_project', this.work.projectId)
         const fromTime = new dateUtil.MyTime(this.work.fromTime)
         const toTime = new dateUtil.MyTime(this.work.toTime)
         this.work['fromTime'] = fromTime.getTime()
@@ -202,7 +222,11 @@
       this.loadCompanies()
     },
     watch: {
-      'work.companyId': function () {
+      work: function () {
+        console.log('work changed')
+      },
+      companyId: function () {
+        console.log('company id changed')
         this.loadProjects(this.work.companyId)
       }
     }

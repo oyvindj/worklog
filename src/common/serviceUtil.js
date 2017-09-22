@@ -41,7 +41,7 @@ export const create = ({dispatch, commit, state}, payload, entity, dispatchTo, i
     console.log('created entity...')
     commit('SET_CONFIRMED', true)
     success(resp.data)
-    dispatch(dispatchTo)
+    // dispatch(dispatchTo)
   }).catch(error => {
     console.log('Error creating ' + entity, error)
     commit('SET_ERROR', true)

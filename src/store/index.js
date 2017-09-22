@@ -12,6 +12,7 @@ Vue.use(Vuex, VueAxios, axios)
 const state = {
   workList: [],
   projects: [],
+  allProjects: [],
   companies: [],
   users: [],
   authenticated: false,

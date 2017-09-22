@@ -8,6 +8,10 @@
                        class="ui primary button big">
             Hjem
           </router-link>
+          <router-link :to="'/worklist'"
+                       class="ui primary button big">
+            Arbeidslogg
+          </router-link>
           <button
             class="ui right floated button big"
             v-if="!authenticated"

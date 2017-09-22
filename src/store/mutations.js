@@ -10,6 +10,9 @@ export const SET_WORK_LIST = (state, data) => {
 export const SET_PROJECTS = (state, data) => {
   state.projects = data
 }
+export const SET_ALL_PROJECTS = (state, data) => {
+  state.allProjects = data
+}
 export const SET_COMPANIES = (state, data) => {
   state.companies = data
 }

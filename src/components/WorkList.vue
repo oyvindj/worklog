@@ -37,7 +37,7 @@
       </thead>
       <tbody v-for="(item, index) in questionList">
       <tr>
-        <td> <div class="ui fluid large label">{{item.company}}</div> </td>
+        <td> <div class="ui fluid large label">{{ getCompanyName(item.company) }}</div> </td>
         <td> <div class="ui fluid large label">{{item.project}}</div> </td>
         <td> <div class="ui fluid large label">{{ dateString(item) }}</div> </td>
         <td> <div class="ui fluid large label">{{ item.duration }}</div> </td>
@@ -68,9 +68,9 @@
   export default {
     name: 'questionlist',
     props: {
-      questionList: {
-        default: null
-      },
+      /* questionList: {
+        default: this.work
+      }, */
       isAdmin: {
         default: false,
         type: Boolean
@@ -89,10 +89,21 @@
     },
     computed: {
       ...mapGetters({
-        profile: 'GET_USER'
+        profile: 'GET_USER',
+        companies: 'GET_COMPANIES',
+        projects: 'GET_ALL_PROJECTS',
+        questionList: 'GET_WORK_LIST'
       })
     },
     methods: {
+      getCompanyName (id) {
+        for (const item of this.companies) {
+          if (item.id === id) {
+            return item.name
+          }
+          return 'undefined'
+        }
+      },
       confirmDelete () {
         console.log('confirm...')
         const success = (item) => {
@@ -116,7 +127,10 @@
         console.log('vote up...')
       },
       ...mapActions({
-        deleteQuestion: 'DELETE_WORK'
+        deleteQuestion: 'DELETE_WORK',
+        loadAllProjects: 'LOAD_ALL_PROJECTS',
+        loadCompanies: 'LOAD_COMPANIES',
+        loadWorkList: 'LOAD_WORK_LIST'
       }),
       ...mapMutations({
       }),
@@ -134,6 +148,9 @@
       }
     },
     mounted: function () {
+      this.loadCompanies()
+      this.loadAllProjects()
+      this.loadWorkList()
     }
   }
 </script>
