@@ -1,6 +1,7 @@
 <template>
   <div>
     <Navbar></Navbar>
+    <div class="ui hidden divider"></div>
     <div class="container">
       <router-view
         :auth="auth"

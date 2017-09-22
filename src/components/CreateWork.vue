@@ -83,6 +83,10 @@
         </select>
         <a @click="submitCreateProject()">Legg til</a>
       </div>
+      <div class="select-project">
+        <SelectCompany></SelectCompany>
+        <SelectProject companyId="work.companyId"></SelectProject>
+      </div>
       <button :disabled="!validate()" v-on:click="submitForm" class="ui large primary button" tabindex="0">
         Lagre
       </button>
@@ -93,6 +97,8 @@
   import { mapGetters, mapMutations, mapActions } from 'vuex'
   import * as dateUtil from '../common/dateUtil'
   import modal from 'vue-semantic-modal'
+  import SelectCompany from './SelectCompany.vue'
+  import SelectProject from './SelectProject.vue'
 
   export default {
     name: 'creatework',
@@ -108,7 +114,7 @@
       }
     },
     components: {
-      modal
+      modal, SelectCompany, SelectProject
     },
     computed: {
       ...mapGetters({
@@ -246,5 +252,10 @@
   .select {
     max-width: 600px;
     margin: 5px;
+  }
+  .select-project {
+    display: flex;
+    flex-direction: row;
+    align-content: stretch;
   }
 </style>
