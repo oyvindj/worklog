@@ -1,7 +1,24 @@
 <template xmlns="http://www.w3.org/1999/html">
   <div class="select-company">
+    <modal v-model="showCreateCompany">
+      <p slot="header">Skriv inn firmanavn</p>
+      <div slot="content" class="work-form">
+        <div class="ui labeled input form-row" v-bind:class="errorClass('name')">
+          <div class="ui label">Firmanavn</div>
+          <input v-model="companyName" placeholder="firmanavn">
+        </div>
+      </div>
+      <template slot="actions">
+        <div class="ui black deny button" @click="showCreateCompany=false">Avbryt</div>
+        <div class="ui positive right button" @click="confirmCreateCompany()">Lagre</div>
+      </template>
+    </modal>
     <div class="ui segment">
-      <div class="ui block header"><i class="building icon"></i>Firma</div>
+      <div class="ui block header select-header"><i class="building icon"></i>
+        <div>Firma</div>
+        &nbsp;&nbsp;&nbsp;
+        <div class="add-link"><a @click="submitCreateCompany()">Legg til</a></div>
+      </div>
       <div class="ui middle aligned selection animated list company-list">
       <div v-for="item in companies" class="item" v-bind:class="selectedClass(item.id)" @click="select(item.id)">
         <div class="content" v-bind:class="selectedClass(item.id)" @click="select(item.id)">
@@ -14,12 +31,15 @@
 </template>
 <script>
   import { mapGetters, mapMutations, mapActions } from 'vuex'
-  // import Foo from './Foo.vue'
+  import modal from 'vue-semantic-modal'
 
   export default {
     name: 'selectcompany',
     data () {
-      return {}
+      return {
+        companyName: '',
+        showCreateCompany: false
+      }
     },
     props: {
       name: {
@@ -27,7 +47,7 @@
       }
     },
     components: {
-      // Foo
+      modal
     },
     computed: {
       ...mapGetters({
@@ -36,6 +56,23 @@
       })
     },
     methods: {
+      confirmCreateCompany () {
+        console.log('confirmCreateCompany: ' + this.companyName)
+        const success = (item) => {
+          console.log('company created...')
+        }
+        const error = (item) => {
+          console.log('error company create: ' + item)
+        }
+        const company = {
+          name: this.companyName
+        }
+        this.createCompany({data: company, success: success, error: error})
+        this.showCreateCompany = false
+      },
+      submitCreateCompany () {
+        this.showCreateCompany = true
+      },
       ...mapMutations({
         setSelectedCompany: 'SET_SELECTED_COMPANY'
       }),
@@ -50,6 +87,9 @@
           return 'active'
         }
         return ''
+      },
+      errorClass () {
+        return ''
       }
     },
     mounted: function () {},
@@ -59,5 +99,13 @@
 <style scoped>
   .company-list {
     min-height: 100px;
+  }
+  .select-header {
+    display: flex;
+    flex-direction: row;
+  }
+  .select-header .add-link {
+    justify-self: flex-end;
+    align-self: flex-end;
   }
 </style>

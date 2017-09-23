@@ -1,38 +1,6 @@
 <template xmlns="http://www.w3.org/1999/html">
   <div class="create-worknavbar">
     <h3>Logg Arbeid</h3>
-    <modal v-model="showCreateProject">
-      <p slot="header">Skriv inn prosjektnavn og velg firma</p>
-      <div slot="content" class="work-form">
-        <div class="ui labeled input form-row" v-bind:class="errorClass('name')">
-          <div class="ui label">Prosjektnavn</div>
-          <input v-model="projectName" placeholder="prosjektnavn">
-        </div>
-        <div class="ui labeled input form-row" v-bind:class="errorClass('center')">
-          <div class="ui label"><i class="building icon"></i>Firma *</div>
-          <select class="ui fluid dropdown" v-model="projectCompanyId">
-            <option v-for="item in companies" v-bind:value="item.id">{{ item.name }}</option>
-          </select>
-        </div>
-      </div>
-      <template slot="actions">
-        <div class="ui black deny button" @click="showCreateProject=false">Avbryt</div>
-        <div class="ui positive right button" @click="confirmCreateProject()">Lagre</div>
-      </template>
-    </modal>
-    <modal v-model="showCreateCompany">
-      <p slot="header">Skriv inn firmanavn</p>
-      <div slot="content" class="work-form">
-        <div class="ui labeled input form-row" v-bind:class="errorClass('name')">
-          <div class="ui label">Firmanavn</div>
-          <input v-model="companyName" placeholder="firmanavn">
-        </div>
-      </div>
-      <template slot="actions">
-        <div class="ui black deny button" @click="showCreateCompany=false">Avbryt</div>
-        <div class="ui positive right button" @click="confirmCreateCompany()">Lagre</div>
-      </template>
-    </modal>
     <div v-if="error" class="ui error message">
       <i class="close icon" @click="closeError()"></i>
       <div class="header">
@@ -69,20 +37,6 @@
           <input v-model="work.toTime" placeholder="tt:mm">
         </div>
       </div>
-      <!-- <div class="ui labeled input form-row" v-bind:class="errorClass('center')">
-        <div class="ui label"><i class="building icon"></i>Firma *</div>
-        <select class="ui fluid dropdown" v-model="companyId">
-          <option v-for="item in companies" v-bind:value="item.id">{{ item.name }}</option>
-        </select>
-        <a @click="submitCreateCompany()">Legg til</a>
-      </div>
-      <div class="ui labeled input form-row" v-bind:class="errorClass('center')">
-        <div class="ui label"><i class="building icon"></i>Prosjekt *</div>
-        <select class="ui fluid dropdown" v-model="work.projectId">
-          <option v-for="item in projects" v-bind:value="item.id">{{ item.name }}</option>
-        </select>
-        <a @click="submitCreateProject()">Legg til</a>
-      </div> -->
       <div class="select-project">
         <SelectCompany></SelectCompany>
         <SelectProject companyId="work.companyId"></SelectProject>
@@ -96,7 +50,6 @@
 <script>
   import { mapGetters, mapMutations, mapActions } from 'vuex'
   import * as dateUtil from '../common/dateUtil'
-  import modal from 'vue-semantic-modal'
   import SelectCompany from './SelectCompany.vue'
   import SelectProject from './SelectProject.vue'
 
@@ -105,16 +58,11 @@
     data () {
       return {
         confirmationMessage: '',
-        work: this.createNewWork(),
-        companyName: '',
-        projectName: '',
-        projectCompanyId: -1,
-        showCreateCompany: false,
-        showCreateProject: false
+        work: this.createNewWork()
       }
     },
     components: {
-      modal, SelectCompany, SelectProject
+      SelectCompany, SelectProject
     },
     computed: {
       ...mapGetters({
@@ -141,41 +89,6 @@
       }
     },
     methods: {
-      confirmCreateCompany () {
-        console.log('confirmCreateCompany: ' + this.companyName)
-        const success = (item) => {
-          console.log('company created...')
-        }
-        const error = (item) => {
-          console.log('error company create: ' + item)
-        }
-        const company = {
-          name: this.companyName
-        }
-        this.createCompany({data: company, success: success, error: error})
-        this.showCreateCompany = false
-      },
-      confirmCreateProject () {
-        const project = {
-          name: this.projectName,
-          companyId: this.projectCompanyId
-        }
-        const success = (item) => {
-          console.log('project created...')
-          this.loadProjects(this.projectCompanyId)
-        }
-        const error = (item) => {
-          console.log('error project create: ' + item)
-        }
-        this.createProject({data: project, success: success, error: error})
-        this.showCreateProject = false
-      },
-      submitCreateProject () {
-        this.showCreateProject = true
-      },
-      submitCreateCompany () {
-        this.showCreateCompany = true
-      },
       createNewWork () {
         const date = new dateUtil.MyDate(new Date())
         this.setSelectedCompany(localStorage.getItem('last_company'))
@@ -219,14 +132,14 @@
         createCompany: 'CREATE_COMPANY',
         createProject: 'CREATE_PROJECT'
       }),
-      errorClass () {
-        return ''
-      },
       closeError () {
         this.setError(false)
       },
       closeMessage () {
         this.setConfirmed(false)
+      },
+      errorClass () {
+        return ''
       }
     },
     mounted: function () {
