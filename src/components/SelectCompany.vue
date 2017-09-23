@@ -60,6 +60,8 @@
         console.log('confirmCreateCompany: ' + this.companyName)
         const success = (item) => {
           console.log('company created...')
+          this.loadCompanies()
+          // this.setSelectedCompany(item.id)
         }
         const error = (item) => {
           console.log('error company create: ' + item)
@@ -76,7 +78,10 @@
       ...mapMutations({
         setSelectedCompany: 'SET_SELECTED_COMPANY'
       }),
-      ...mapActions({}),
+      ...mapActions({
+        loadCompanies: 'LOAD_COMPANIES',
+        createCompany: 'CREATE_COMPANY'
+      }),
       select (id) {
         console.log('selecting id: ' + id)
         this.setSelectedCompany(id)
