@@ -14,6 +14,8 @@ const state = {
   projects: [],
   allProjects: [],
   companies: [],
+  selectedCompany: null,
+  selectedProject: null,
   users: [],
   authenticated: false,
   confirmed: false,

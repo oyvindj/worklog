@@ -7,6 +7,12 @@ export const SET_USER = (state, data) => {
 export const SET_WORK_LIST = (state, data) => {
   state.workList = data
 }
+export const SET_SELECTED_COMPANY = (state, data) => {
+  state.selectedCompany = data
+}
+export const SET_SELECTED_PROJECT = (state, data) => {
+  state.selectedProject = data
+}
 export const SET_PROJECTS = (state, data) => {
   state.projects = data
 }

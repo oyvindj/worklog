@@ -1,7 +1,8 @@
 <template xmlns="http://www.w3.org/1999/html">
-  <div class="navbar">
+  <div class="select-company">
     <div class="ui segment">
-      <div class="ui middle aligned selection animated list">
+      <div class="ui block header"><i class="building icon"></i>Firma</div>
+      <div class="ui middle aligned selection animated list company-list">
       <div v-for="item in companies" class="item" v-bind:class="selectedClass(item.id)" @click="select(item.id)">
         <div class="content" v-bind:class="selectedClass(item.id)" @click="select(item.id)">
           <div class="header">{{ item.name }}</div>
@@ -18,9 +19,7 @@
   export default {
     name: 'selectcompany',
     data () {
-      return {
-        id: null
-      }
+      return {}
     },
     props: {
       name: {
@@ -32,18 +31,21 @@
     },
     computed: {
       ...mapGetters({
-        companies: 'GET_COMPANIES'
+        companies: 'GET_COMPANIES',
+        selectedCompany: 'GET_SELECTED_COMPANY'
       })
     },
     methods: {
-      ...mapMutations({}),
+      ...mapMutations({
+        setSelectedCompany: 'SET_SELECTED_COMPANY'
+      }),
       ...mapActions({}),
       select (id) {
         console.log('selecting id: ' + id)
-        this.id = id
+        this.setSelectedCompany(id)
       },
       selectedClass (id) {
-        if (id === this.id) {
+        if (id === this.selectedCompany) {
           console.log('active id: ' + id)
           return 'active'
         }
@@ -55,4 +57,7 @@
   }
 </script>
 <style scoped>
+  .company-list {
+    min-height: 100px;
+  }
 </style>

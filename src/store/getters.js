@@ -10,6 +10,12 @@ export const GET_USER = state => {
 export const GET_WORK_LIST = state => {
   return state.workList
 }
+export const GET_SELECTED_COMPANY = state => {
+  return state.selectedCompany
+}
+export const GET_SELECTED_PROJECT = state => {
+  return state.selectedProject
+}
 export const GET_PROJECTS = state => {
   return state.projects
 }
