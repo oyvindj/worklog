@@ -19,21 +19,17 @@ export const deleteItem = ({dispatch, commit, state}, payload, entity, dispatchT
   axios.delete(url, {headers: restUtil.headers, params: params}).then(resp => {
     console.log('deleted entity...')
     success(entity)
-    dispatch(dispatchTo)
-  }).catch(error => {
-    console.log('Error deleting ' + entity, error)
+    // dispatch(dispatchTo)
+  }).catch(err => {
+    console.log('Error deleting ' + entity, err)
     error(entity)
   })
 }
-export const create = ({dispatch, commit, state}, payload, entity, dispatchTo, inFilter, success = defaultSuccess, error = defaultError) => {
+export const create = ({dispatch, commit, state}, payload, entity, dispatchTo, filter = {}, success = defaultSuccess, error = defaultError) => {
   if (config.props.DEBUG) {
-    console.log('creating ' + entity + ', dispatch: ' + dispatchTo + ', filter: ' + JSON.stringify(inFilter) + ', payload: ' + JSON.stringify(payload))
+    console.log('creating ' + entity + ', dispatch: ' + dispatchTo + ', filter: ' + JSON.stringify(filter) + ', payload: ' + JSON.stringify(payload))
   }
   const url = restUtil.createUrl(entity)
-  let filter = inFilter
-  if (filter === null) {
-    filter = {}
-  }
   const params = {
     ...filter
   }
@@ -48,39 +44,15 @@ export const create = ({dispatch, commit, state}, payload, entity, dispatchTo, i
     error(payload)
   })
 }
-export const load = ({commit, state}, payload, entity, mutation, inFilter) => {
+export const load = ({commit, state}, payload, entity, mutation, filter = {}) => {
   if (config.props.DEBUG) {
-    console.log('loading ' + entity + ', mutation: ' + mutation + ', filter: ' + JSON.stringify(inFilter))
+    console.log('loading ' + entity + ', mutation: ' + mutation + ', filter: ' + JSON.stringify(filter))
   }
   const url = restUtil.createUrl(entity)
-  let filter = inFilter
-  if (filter === null) {
-    filter = {}
-  }
   const params = {
     ...filter
   }
   axios.get(url, {headers: restUtil.headers, params: params}).then(resp => {
-    // console.log(resp.data)
-    commit(mutation, resp.data)
-  }).catch(error => {
-    console.log('Error getting ' + entity, error)
-  })
-}
-export const loadById = ({commit, state}, payload, entity, mutation, inFilter) => {
-  if (config.props.DEBUG) {
-    console.log('loading ' + entity + ', mutation: ' + mutation + ', filter: ' + JSON.stringify(inFilter))
-  }
-  const url = restUtil.createDeleteUrl(entity, payload)
-  let filter = inFilter
-  if (filter === null) {
-    filter = {}
-  }
-  const params = {
-    ...filter
-  }
-  axios.get(url, {headers: restUtil.headers, params: params}).then(resp => {
-    // console.log(resp.data)
     commit(mutation, resp.data)
   }).catch(error => {
     console.log('Error getting ' + entity, error)

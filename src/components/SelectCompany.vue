@@ -14,15 +14,18 @@
       </template>
     </modal>
     <div class="ui segment">
-      <div class="ui block header select-header"><i class="building icon"></i>
-        <div>Firma</div>
-        &nbsp;&nbsp;&nbsp;
+      <div class="ui block header select-header">
+        <div><i class="building icon"></i><span>Firma</span></div>
         <div class="add-link"><a @click="submitCreateCompany()">Legg til</a></div>
+        <div v-if="!isEdit" class="add-link"><i class="edit icon"></i><a @click="isEdit = true">Rediger</a></div>
+        <div v-if="isEdit" class="add-link"><i class="edit icon"></i><a @click="isEdit = false">Ferdig</a></div>
       </div>
       <div class="ui middle aligned selection animated list company-list">
       <div v-for="item in companies" class="item" v-bind:class="selectedClass(item.id)" @click="select(item.id)">
         <div class="content" v-bind:class="selectedClass(item.id)" @click="select(item.id)">
           <div class="header">{{ item.name }}</div>
+          <button v-if="isEdit" @click="submitDelete(item.id)" class="ui red small right button delete-button">Slett</button>
+          <div v-if="!isEdit"></div>
         </div>
       </div>
       </div>
@@ -38,6 +41,7 @@
     data () {
       return {
         companyName: '',
+        isEdit: false,
         showCreateCompany: false
       }
     },
@@ -56,6 +60,9 @@
       })
     },
     methods: {
+      submitDelete (id) {
+        this.deleteCompany({id: id, success: (item) => this.loadProjects(this.selectedCompany), error: (i) => {}})
+      },
       confirmCreateCompany () {
         console.log('confirmCreateCompany: ' + this.companyName)
         const success = (item) => {
@@ -80,6 +87,7 @@
       }),
       ...mapActions({
         loadCompanies: 'LOAD_COMPANIES',
+        deleteCompanie: 'DELETE_COMPANY',
         createCompany: 'CREATE_COMPANY'
       }),
       select (id) {
@@ -106,11 +114,7 @@
     min-height: 100px;
   }
   .select-header {
-    display: flex;
-    flex-direction: row;
-  }
-  .select-header .add-link {
-    justify-self: flex-end;
-    align-self: flex-end;
+    display: grid;
+    grid-template-columns: 50% 25% 25%;
   }
 </style>

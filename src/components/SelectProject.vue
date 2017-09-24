@@ -21,15 +21,17 @@
     </modal>
     <div class="ui segment">
       <div class="ui block header select-header">
-        <i class="building icon"></i>
-        <span>Prosjekt</span>
-        &nbsp;&nbsp;&nbsp;
-        <div class="add-link"><a @click="submitCreateProject()">Legg til</a></div>
+        <div><i class="building icon"></i> <span>Prosjekt</span></div>
+        <div class="add-link"><i class="add circle icon"></i><a @click="submitCreateProject()">Legg til</a></div>
+        <div v-if="!isEdit" class="add-link"><i class="edit icon"></i><a @click="isEdit = true">Rediger</a></div>
+        <div v-if="isEdit" class="add-link"><i class="edit icon"></i><a @click="isEdit = false">Ferdig</a></div>
       </div>
       <div class="ui middle aligned selection animated list project-list">
       <div v-for="item in projects" class="item" v-bind:class="selectedClass(item.id)" @click="select(item.id)">
-        <div class="content" v-bind:class="selectedClass(item.id)" @click="select(item.id)">
+        <div class="content project-content" v-bind:class="selectedClass(item.id)" @click="select(item.id)">
           <div class="header">{{ item.name }}</div>
+          <button v-if="isEdit" @click="submitDelete(item.id)" class="ui red small right button delete-button">Slett</button>
+          <div v-if="!isEdit"></div>
         </div>
       </div>
       </div>
@@ -47,6 +49,7 @@
       return {
         projectName: '',
         projectCompanyId: -1,
+        isEdit: false,
         showCreateProject: false
       }
     },
@@ -86,11 +89,15 @@
         this.projectCompanyId = this.selectedCompany
         this.showCreateProject = true
       },
+      submitDelete (id) {
+        this.deleteProject({id: id, success: (item) => this.loadProjects(this.selectedCompany), error: (i) => {}})
+      },
       ...mapMutations({
         setSelectedProject: 'SET_SELECTED_PROJECT'
       }),
       ...mapActions({
         loadProjects: 'LOAD_PROJECTS',
+        deleteProject: 'DELETE_PROJECT',
         createProject: 'CREATE_PROJECT'
       }),
       select (id) {
@@ -122,19 +129,21 @@
   }
 </script>
 <style scoped>
-  .select-header {
-    display: flex;
-    flex-direction: row;
-  }
   .select-project {
     display: flex;
     flex-direction: column;
   }
+  .select-header {
+    display: grid;
+    grid-template-columns: 50% 25% 25%;
+  }
   .project-list {
     min-height: 100px;
   }
-  .select-header .add-link {
-    justify-self: flex-end;
-    align-self: flex-end;
+  .project-content {
+    display: grid;
+    grid-template-columns: 80% 20%;
+  }
+  .delete-button {
   }
 </style>
