@@ -3,12 +3,22 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import Callback from '@/components/Callback'
 import WorkList from '@/components/WorkList'
+import TodoList from '@/components/TodoList'
+import CreateTodo from '@/components/CreateTodo'
 Vue.use(Router)
 
 const router = new Router({
   mode: 'history',
   routes: [
     {
+      path: '/createtodo',
+      name: 'CreateTodo',
+      component: CreateTodo
+    }, {
+      path: '/todolist',
+      name: 'TodoList',
+      component: TodoList
+    }, {
       path: '/worklist',
       name: 'Worklist',
       component: WorkList

@@ -12,6 +12,14 @@
                        class="ui primary button big">
             Arbeidslogg
           </router-link>
+          <router-link :to="'/createtodo'"
+                       class="ui primary button big">
+            Lag Todo
+          </router-link>
+          <router-link :to="'/todolist'"
+                       class="ui primary button big">
+            Todo-Liste
+          </router-link>
           <button
             class="ui right floated button big"
             v-if="!authenticated"

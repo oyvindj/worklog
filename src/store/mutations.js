@@ -4,6 +4,9 @@ export const SET_AUTHENTICATED = (state, data) => {
 export const SET_USER = (state, data) => {
   state.user = data
 }
+export const SET_TODOS = (state, data) => {
+  state.todos = data
+}
 export const SET_WORK_LIST = (state, data) => {
   state.workList = data
 }

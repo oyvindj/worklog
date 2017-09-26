@@ -6,6 +6,15 @@ export const DELETE_COMPANY = ({dispatch, commit, state}, payload) => {
 export const DELETE_PROJECT = ({dispatch, commit, state}, payload) => {
   serviceUtil.deleteItem({dispatch, commit, state}, payload.id, 'project', null, payload.success, payload.error)
 }
+export const LOAD_TODOS = ({commit, state}, payload) => {
+  serviceUtil.load({commit, state}, payload, 'todo', 'SET_TODOS', null)
+}
+export const DELETE_TODO = ({dispatch, commit, state}, payload) => {
+  serviceUtil.deleteItem({dispatch, commit, state}, payload.item, 'todo', 'LOAD_TODOS', payload.success, payload.error)
+}
+export const CREATE_TODO = ({dispatch, commit, state}, payload) => {
+  serviceUtil.create({dispatch, commit, state}, payload.item, 'todo', 'LOAD_TODOS', {}, payload.success, payload.error)
+}
 export const DELETE_WORK = ({dispatch, commit, state}, payload) => {
   serviceUtil.deleteItem({dispatch, commit, state}, payload.item, 'work', 'LOAD_WORK_LIST', payload.success, payload.error)
 }

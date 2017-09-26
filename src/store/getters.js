@@ -7,6 +7,9 @@ export const GET_PROFILE = state => {
 export const GET_USER = state => {
   return state.user
 }
+export const GET_TODOS = state => {
+  return state.todos
+}
 export const GET_WORK_LIST = state => {
   return state.workList
 }
