@@ -78,6 +78,7 @@
         const success = (item) => {
           console.log('project created...')
           this.loadProjects(this.projectCompanyId)
+          this.projectName = ''
         }
         const error = (item) => {
           console.log('error project create: ' + item)
@@ -101,12 +102,10 @@
         createProject: 'CREATE_PROJECT'
       }),
       select (id) {
-        console.log('selecting id: ' + id)
         this.setSelectedProject(id)
       },
       selectedClass (id) {
         if (id === this.selectedProject) {
-          console.log('active id: ' + id)
           return 'active'
         }
         return ''

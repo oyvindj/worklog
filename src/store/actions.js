@@ -1,7 +1,7 @@
 import * as serviceUtil from '../common/serviceUtil'
 
 export const DELETE_COMPANY = ({dispatch, commit, state}, payload) => {
-  serviceUtil.deleteItem({dispatch, commit, state}, payload.id, 'project', null, payload.success, payload.error)
+  serviceUtil.deleteItem({dispatch, commit, state}, payload.id, 'company', null, payload.success, payload.error)
 }
 export const DELETE_PROJECT = ({dispatch, commit, state}, payload) => {
   serviceUtil.deleteItem({dispatch, commit, state}, payload.id, 'project', null, payload.success, payload.error)

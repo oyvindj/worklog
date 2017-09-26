@@ -1,7 +1,6 @@
 const findSeparator = (time) => {
   const seps = [':', '.', ',', '-']
   for (const sep of seps) {
-    console.log(sep)
     if (time.indexOf(sep) !== -1) {
       return sep
     }

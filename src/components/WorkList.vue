@@ -37,8 +37,8 @@
       </thead>
       <tbody v-for="(item, index) in questionList">
       <tr>
-        <td> <div class="ui fluid large label">{{ getCompanyName(item.company) }}</div> </td>
-        <td> <div class="ui fluid large label">{{item.project}}</div> </td>
+        <td> <div class="ui fluid large label">{{ getCompanyName(item.companyId) }}</div> </td>
+        <td> <div class="ui fluid large label">{{ getProjectName(item.projectId) }}</div> </td>
         <td> <div class="ui fluid large label">{{ dateString(item) }}</div> </td>
         <td> <div class="ui fluid large label">{{ item.duration }}</div> </td>
         <td> <div class="ui fluid large label">{{ item.description }}</div> </td>
@@ -96,18 +96,27 @@
       })
     },
     methods: {
+      getProjectName (id) {
+        for (const item of this.projects) {
+          if (item.id === id) {
+            return item.name
+          }
+        }
+        return 'undefined'
+      },
       getCompanyName (id) {
         for (const item of this.companies) {
           if (item.id === id) {
             return item.name
           }
-          return 'undefined'
         }
+        return 'undefined'
       },
       confirmDelete () {
         console.log('confirm...')
         const success = (item) => {
           console.log('item deleted...')
+          this.loadWorkList()
           this.showConfirmDelete = true
           this.showErrorDelete = false
         }

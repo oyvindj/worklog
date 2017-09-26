@@ -45,6 +45,7 @@
         Lagre
       </button>
     </div>
+     <!-- <SelectableList items="projects" loader="LOAD_PROJECTS" creater="CREATE_PROJECT" deleter="DELETE_PROJECT" selector="SELECTED_PROJECT" paramName="companyId" paramValue="SELECTED_COMPANY"></SelectableList> -->
   </div>
 </template>
 <script>
@@ -52,6 +53,8 @@
   import * as dateUtil from '../common/dateUtil'
   import SelectCompany from './SelectCompany.vue'
   import SelectProject from './SelectProject.vue'
+  import SelectableList from './SelectableList.vue'
+  import * as miscUtil from '../common/miscUtil'
 
   export default {
     name: 'creatework',
@@ -62,7 +65,7 @@
       }
     },
     components: {
-      SelectCompany, SelectProject
+      SelectCompany, SelectProject, SelectableList
     },
     computed: {
       ...mapGetters({
@@ -111,7 +114,7 @@
         this.work['toTime'] = toTime.getTime()
         const success = (item) => {
           console.log('cb called: ' + JSON.stringify(item))
-          this.confirmationMessage = item.company + ' - ' + item.project + ' (' + item.description + '): ' + item.fromTime + '-' + item.toTime + ' (' + item.duration + ')'
+          this.confirmationMessage = miscUtil.getNameFromList(item.companyId, this.companies) + ' - ' + miscUtil.getNameFromList(item.projectId, this.projects) + ' (' + item.description + '): ' + item.fromTime + '-' + item.toTime + ' (' + item.duration + ')'
           this.work = this.createNewWork()
         }
         this.createWork({work: this.work, success: success, error: success})

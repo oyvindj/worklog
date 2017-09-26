@@ -53,6 +53,7 @@ export const load = ({commit, state}, payload, entity, mutation, filter = {}) =>
     ...filter
   }
   axios.get(url, {headers: restUtil.headers, params: params}).then(resp => {
+    console.log(resp.data)
     commit(mutation, resp.data)
   }).catch(error => {
     console.log('Error getting ' + entity, error)

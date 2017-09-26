@@ -1,5 +1,13 @@
 <template xmlns="http://www.w3.org/1999/html">
   <div class="select-company">
+    <modal v-model="showConfirmDelete">
+      <p slot="header">Bekreft Sletting</p>
+      <p slot="content">Er du sikker på at du vil slette?</p>
+      <template slot="actions">
+        <div class="ui black deny button" @click="showConfirmDelete=false">Nei</div>
+        <div class="ui positive right button" @click="confirmDelete()">Ja</div>
+      </template>
+    </modal>
     <modal v-model="showCreateCompany">
       <p slot="header">Skriv inn firmanavn</p>
       <div slot="content" class="work-form">
@@ -22,7 +30,7 @@
       </div>
       <div class="ui middle aligned selection animated list company-list">
       <div v-for="item in companies" class="item" v-bind:class="selectedClass(item.id)" @click="select(item.id)">
-        <div class="content" v-bind:class="selectedClass(item.id)" @click="select(item.id)">
+        <div class="content company-content" v-bind:class="selectedClass(item.id)" @click="select(item.id)">
           <div class="header">{{ item.name }}</div>
           <button v-if="isEdit" @click="submitDelete(item.id)" class="ui red small right button delete-button">Slett</button>
           <div v-if="!isEdit"></div>
@@ -42,7 +50,9 @@
       return {
         companyName: '',
         isEdit: false,
-        showCreateCompany: false
+        showCreateCompany: false,
+        showConfirmDelete: false,
+        deleteId: -1
       }
     },
     props: {
@@ -61,14 +71,19 @@
     },
     methods: {
       submitDelete (id) {
-        this.deleteCompany({id: id, success: (item) => this.loadProjects(this.selectedCompany), error: (i) => {}})
+        this.deleteId = id
+        this.showConfirmDelete = true
+      },
+      confirmDelete () {
+        this.deleteCompany({id: this.deleteId, success: (item) => this.loadCompanies(), error: (i) => {}})
+        this.deleteId = -1
+        this.showConfirmDelete = false
       },
       confirmCreateCompany () {
-        console.log('confirmCreateCompany: ' + this.companyName)
         const success = (item) => {
           console.log('company created...')
           this.loadCompanies()
-          // this.setSelectedCompany(item.id)
+          this.companyName = ''
         }
         const error = (item) => {
           console.log('error company create: ' + item)
@@ -87,16 +102,14 @@
       }),
       ...mapActions({
         loadCompanies: 'LOAD_COMPANIES',
-        deleteCompanie: 'DELETE_COMPANY',
+        deleteCompany: 'DELETE_COMPANY',
         createCompany: 'CREATE_COMPANY'
       }),
       select (id) {
-        console.log('selecting id: ' + id)
         this.setSelectedCompany(id)
       },
       selectedClass (id) {
         if (id === this.selectedCompany) {
-          console.log('active id: ' + id)
           return 'active'
         }
         return ''
@@ -116,5 +129,9 @@
   .select-header {
     display: grid;
     grid-template-columns: 50% 25% 25%;
+  }
+  .company-content {
+    display: grid;
+    grid-template-columns: 80% 20%;
   }
 </style>
