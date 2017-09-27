@@ -4,21 +4,12 @@
       You are not logged in! Please <a @click="auth.login()">Log In</a> to continue.
     </h4>
 
-    <!--<div class="ui buttons">
-      <button class="ui button" @click="submitQuestion()">Send inn nytt spørsmål</button>
-      <div id="or-label" class="or"></div>
-      <button class="ui positive button">Se alle spørsmål</button>
-    </div>-->
-
     <CreateWork v-if="authenticated"></CreateWork>
-    <div class="ui hidden divider"></div>
-    <!-- <WorkList v-if="authenticated" :isAdmin=false :questionList="questions"></WorkList> -->
   </div>
 </template>
 
 <script>
   import { mapGetters, mapActions } from 'vuex'
-  import WorkList from './WorkList.vue'
   import CreateWork from './CreateWork.vue'
 
   export default {
@@ -26,21 +17,14 @@
     props: ['auth', 'authenticated'],
     computed: {
       ...mapGetters({
-        profile: 'GET_USER',
-        questions: 'GET_WORK_LIST'
+        profile: 'GET_USER'
       })
     },
     components: {
-      WorkList, CreateWork
+      CreateWork
     },
     methods: {
-      submitQuestion () {
-        this.createQuestion({description: 'Foo question?', nickname: this.profile.nickname})
-      },
-      ...mapActions({
-        loadQuestionList: 'LOAD_WORK_LIST',
-        createQuestion: 'CREATE_WORK'
-      }),
+      ...mapActions({}),
       getUserId () {
         if (this.profile && this.profile.sub) {
           return this.profile.sub.split('|')[1]
@@ -48,9 +32,6 @@
           return ''
         }
       }
-    },
-    mounted: function () {
-      this.loadQuestionList()
     }
   }
 </script>
