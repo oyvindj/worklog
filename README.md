@@ -1,21 +1,21 @@
-Worklog Time Tracking application
+# Worklog Time Tracking application
 
 ## Installation
 
 ```bash
-cd 01-Login
+cd worklog
 npm install
 ```
 
 ## Run the Application
 
 ```bash
-npm start
+npm run dev
 ```
 
 The application will be served at `http://localhost:8080`.
 
-!Plugins
+## Plugins
 Vue Semantic Modal plugin:
 https://github.com/David-Desmaisons/Vue-Semantic-Modal
 
@@ -23,7 +23,7 @@ Translation Plugin:
 - https://github.com/dkfbasel/vuex-i18n
 - i18n-vuex
 
-!Technologies
+## Technologies
   - Vue 2.0 frontent
   - Symantic UI framework
   - Vue Router for routing/meny
@@ -37,6 +37,7 @@ Translation Plugin:
   - Hot-reloading of UI in browser
   - Uses standard VUE CLI webback build system
   - Reusable components
+  - Modal dialogs
   - Internationalization (coming)
 
 
